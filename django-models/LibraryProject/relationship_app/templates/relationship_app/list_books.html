@@ -5,12 +5,10 @@
 </head>
 <body>
     <h1>All Books</h1>
-
     <ul>
         {% for book in books %}
             <li>{{ book.title }} - {{ book.author.name }}</li>
         {% endfor %}
     </ul>
-
 </body>
 </html>
