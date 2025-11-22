@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ library.name }}</title>
+    <meta charset="UTF-8">
+    <title>Library Detail</title>
 </head>
 <body>
-    <h1>{{ library.name }}</h1>
-    <h2>Books in this library:</h2>
+    <h1>Library: {{ library.name }}</h1>
+    <h2>Books in Library:</h2>
     <ul>
         {% for book in library.books.all %}
-            <li>{{ book.title }} - {{ book.author.name }}</li>
+        <li>{{ book.title }} by {{ book.author.name }} (Published {{ book.publication_year }})</li>
         {% endfor %}
     </ul>
 </body>
