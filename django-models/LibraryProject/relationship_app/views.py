@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 from .models import Library, Book
 
 def list_books(request):
@@ -44,26 +45,23 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import User
-
-def is_admin(user):
+def admin_check(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-def is_librarian(user):
+def librarian_check(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
-def is_member(user):
+def member_check(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
-@user_passes_test(is_admin)
+@user_passes_test(admin_check)
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
 
-@user_passes_test(is_librarian)
+@user_passes_test(librarian_check)
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html')
 
-@user_passes_test(is_member)  
+@user_passes_test(member_check)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
