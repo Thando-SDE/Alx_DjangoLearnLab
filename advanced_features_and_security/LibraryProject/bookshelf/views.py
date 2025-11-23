@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.utils.html import escape
 from .models import Book
-from .forms import BookForm, ExampleForm
+from .forms import ExampleForm
 
 
 # Step 3: Secure book list view with SQL injection prevention
