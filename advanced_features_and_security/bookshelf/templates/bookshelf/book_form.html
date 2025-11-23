@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if action == 'Create' %}Add New Book{% else %}Edit Book{% endif %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .error {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>{% if action == 'Create' %}Add New Book{% else %}Edit Book{% endif %}</h1>
+        
+        <!-- Display Django messages -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message {{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <!-- Step 2: Form with CSRF token -->
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Display form errors at top -->
+            {% if form.non_field_errors %}
+                <div class="error">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Title field -->
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Title:</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error">{{ form.title.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Author field -->
+            <div class="form-group">
+                <label for="{{ form.author.id_for_label }}">Author:</label>
+                {{ form.author }}
+                {% if form.author.errors %}
+                    <div class="error">{{ form.author.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Publication Year field -->
+            <div class="form-group">
+                <label for="{{ form.publication_year.id_for_label }}">Publication Year:</label>
+                {{ form.publication_year }}
+                {% if form.publication_year.errors %}
+                    <div class="error">{{ form.publication_year.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- ISBN field -->
+            <div class="form-group">
+                <label for="{{ form.isbn.id_for_label }}">ISBN:</label>
+                {{ form.isbn }}
+                {% if form.isbn.errors %}
+                    <div class="error">{{ form.isbn.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <!-- Description field -->
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Description:</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="error">{{ form.description.errors.0 }}</div>
+                {% endif %}
+                <small>HTML tags like &lt;p&gt;, &lt;br&gt;, &lt;strong&gt;, &lt;em&gt; are allowed but sanitized for security.</small>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary">
+                    {% if action == 'Create' %}Create Book{% else %}Update Book{% endif %}
+                </button>
+                <a href="{% url 'book_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
