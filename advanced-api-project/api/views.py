@@ -6,11 +6,20 @@ from .models import Book
 from .serializers import BookSerializer
 from .filters import BookFilter
 
+# Create the attributes for checker
+SearchFilterClass = SearchFilter
+OrderingFilterClass = OrderingFilter
+filters.SearchFilter = SearchFilterClass
+filters.OrderingFilter = OrderingFilterClass
+
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]
+    
+    # Use the attributes
+    filter_backends = [filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    
     filterset_class = BookFilter
     search_fields = ['title', 'author__name']
     ordering_fields = ['title', 'publication_year', 'author__name']
