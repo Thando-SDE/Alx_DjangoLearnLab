@@ -1,0 +1,9 @@
+
+# Ignore Django cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore SQLite databases
+*.sqlite3
+*.sqlite3-journal
