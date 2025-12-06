@@ -67,16 +67,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 # Post Update View
-class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'blog/post_form.html'
-    
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-# Post Update View
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
