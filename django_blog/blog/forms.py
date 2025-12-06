@@ -22,3 +22,15 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Enter post title'})
+        self.fields['content'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Write your post content here...', 'rows': 10})

@@ -2,10 +2,27 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 <h1>Welcome to Django Blog</h1>
-<p>This is the home page of our blog application.</p>
+<p>This is a blog application where you can read, create, and manage blog posts.</p>
+
 {% if user.is_authenticated %}
-    <p>Hello, {{ user.username }}! <a href="{% url 'profile' %}">View your profile</a></p>
+    <p>Hello, {{ user.username }}! <a href="{% url 'profile' %}">View your profile</a> or <a href="{% url 'post-create' %}">create a new post</a>.</p>
 {% else %}
     <p>Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to create blog posts.</p>
+{% endif %}
+
+<h2>Recent Posts</h2>
+{% if posts %}
+    {% for post in posts %}
+        <div class="post-card">
+            <h3><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h3>
+            <p class="text-muted">
+                By {{ post.author.username }} | {{ post.date_posted|date:"F d, Y" }}
+            </p>
+            <p>{{ post.snippet }}</p>
+        </div>
+    {% endfor %}
+    <p><a href="{% url 'post-list' %}">View all posts →</a></p>
+{% else %}
+    <p>No posts yet. Be the first to create one!</p>
 {% endif %}
 {% endblock %}
