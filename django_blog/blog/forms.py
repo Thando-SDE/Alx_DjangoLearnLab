@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from .models import Post, Comment
 
 class UserRegisterForm(UserCreationForm):
@@ -49,3 +50,11 @@ class CommentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['content'].label = ''
+    
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        if len(content) < 10:
+            raise ValidationError('Comment must be at least 10 characters long.')
+        if len(content) > 1000:
+            raise ValidationError('Comment cannot exceed 1000 characters.')
+        return content

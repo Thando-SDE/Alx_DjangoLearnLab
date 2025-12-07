@@ -29,11 +29,7 @@
         <div class="comment-form card mt-3">
             <div class="card-body">
                 <h5 class="card-title">Add a Comment</h5>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ comment_form.content }}
-                    <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
-                </form>
+                <p><a href="{% url 'comment-create' post.pk %}" class="btn btn-primary">Add New Comment</a></p>
             </div>
         </div>
         {% else %}
