@@ -127,10 +127,10 @@ def posts_by_tag(request, tag_name):
     posts = Post.objects.filter(tags__name=tag_name).distinct()
     context = {
         'posts': posts,
-        'tag_name': tag_name,
+        'tag': tag_name,
         'total_results': posts.count()
     }
-    return render(request, 'blog/search_results.html', context)
+    return render(request, 'blog/posts_by_tag.html', context)
 
 def home(request):
     posts = Post.objects.all().order_by('-date_posted')[:5]
