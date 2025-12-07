@@ -2,27 +2,65 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 <h1>Welcome to Django Blog</h1>
-<p>This is a blog application where you can read, create, and manage blog posts.</p>
 
-{% if user.is_authenticated %}
-    <p>Hello, {{ user.username }}! <a href="{% url 'profile' %}">View your profile</a> or <a href="{% url 'post-create' %}">create a new post</a>.</p>
-{% else %}
-    <p>Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to create blog posts.</p>
-{% endif %}
-
-<h2>Recent Posts</h2>
-{% if posts %}
-    {% for post in posts %}
-        <div class="post-card">
-            <h3><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h3>
-            <p class="text-muted">
-                By {{ post.author.username }} | {{ post.date_posted|date:"F d, Y" }}
-            </p>
-            <p>{{ post.snippet }}</p>
+<div class="row">
+    <div class="col-md-8">
+        <h2>Latest Posts</h2>
+        {% for post in posts %}
+        <div class="post-card card mb-4">
+            <div class="card-body">
+                <h3 class="card-title"><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h3>
+                <p class="text-muted">
+                    By {{ post.author.username }} | {{ post.date_posted|date:"F d, Y" }}
+                </p>
+                
+                {% if post.tags.all %}
+                <div class="tags mb-2">
+                    {% for tag in post.tags.all %}
+                    <a href="{% url 'posts-by-tag' tag.name %}" class="tag-badge badge badge-primary">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <p class="card-text">{{ post.snippet }}</p>
+                <a href="{% url 'post-detail' post.pk %}" class="btn btn-sm btn-outline-primary">Read more →</a>
+            </div>
         </div>
-    {% endfor %}
-    <p><a href="{% url 'post-list' %}">View all posts →</a></p>
-{% else %}
-    <p>No posts yet. Be the first to create one!</p>
-{% endif %}
+        {% empty %}
+        <div class="alert alert-info">
+            No posts yet. <a href="{% url 'post-create' %}">Create the first post</a>!
+        </div>
+        {% endfor %}
+        
+        <a href="{% url 'post-list' %}" class="btn btn-primary">View All Posts</a>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Search Posts</h5>
+                <form method="GET" action="{% url 'search' %}" class="search-form">
+                    <input type="text" name="q" class="form-control mb-2" placeholder="Search posts...">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Popular Tags</h5>
+                <div class="tags">
+                    <!-- Tags will be dynamically loaded -->
+                    {% comment %}
+                    Sample tags - in a real app, you'd get these from your database
+                    {% endcomment %}
+                    <a href="{% url 'posts-by-tag' 'django' %}" class="tag-badge badge badge-primary">django</a>
+                    <a href="{% url 'posts-by-tag' 'python' %}" class="tag-badge badge badge-primary">python</a>
+                    <a href="{% url 'posts-by-tag' 'web' %}" class="tag-badge badge badge-primary">web</a>
+                    <a href="{% url 'posts-by-tag' 'tutorial' %}" class="tag-badge badge badge-primary">tutorial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
