@@ -7,8 +7,6 @@
 
 {% if form.instance.pk %}
     <p>On post: <strong>{{ object.post.title }}</strong></p>
-{% else %}
-    <p>On post: <strong>{{ view.kwargs.post_id }}</strong></p>
 {% endif %}
 
 <form method="POST">
@@ -25,7 +23,7 @@
     {% if form.instance.pk %}
         <a href="{% url 'post-detail' object.post.pk %}" class="btn btn-secondary">Cancel</a>
     {% else %}
-        <a href="{% url 'post-detail' view.kwargs.post_id %}" class="btn btn-secondary">Cancel</a>
+        <a href="{% url 'post-detail' view.kwargs.pk %}" class="btn btn-secondary">Cancel</a>
     {% endif %}
 </form>
 {% endblock %}
