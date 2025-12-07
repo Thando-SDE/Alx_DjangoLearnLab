@@ -235,3 +235,75 @@ form button:hover {
 .post-actions {
     margin-top: 20px;
 }
+
+/* Comments Section */
+.comments-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+/* Comment Cards */
+.comment.card {
+    border: 1px solid #e9ecef;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-header strong {
+    font-size: 16px;
+}
+
+.comment-header .text-muted {
+    font-size: 12px;
+}
+
+.comment-content {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.comment-actions {
+    margin-top: 10px;
+}
+
+.comment-actions .btn {
+    padding: 3px 10px;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+/* Comment Form */
+.comment-form .card {
+    border: 1px solid #007bff;
+}
+
+.comment-form .card-title {
+    color: #007bff;
+    font-size: 18px;
+}
+
+/* Comment Preview */
+.comment-preview {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+/* Alert for login to comment */
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+    padding: 10px 15px;
+    border-radius: 4px;
+}

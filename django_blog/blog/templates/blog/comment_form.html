@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+{% block title %}
+    {% if form.instance.pk %}Edit Comment{% else %}Add Comment{% endif %}
+{% endblock %}
+{% block content %}
+<h1>{% if form.instance.pk %}Edit Comment{% else %}Add Comment{% endif %}</h1>
+<p>On post: <strong>{{ object.post.title }}</strong></p>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+        {% if form.content.errors %}
+            <div class="error">{{ form.content.errors }}</div>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="{% url 'post-detail' object.post.pk %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
