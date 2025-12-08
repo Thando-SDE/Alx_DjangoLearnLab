@@ -18,6 +18,21 @@ class PostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 5
 
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        return Post.objects.filter(tags__slug=tag_slug).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.kwargs.get('tag_slug')
+        return context
 class PostDetailView(DetailView):
     model = Post
     
@@ -122,15 +137,6 @@ def search(request):
         'total_results': posts.count()
     }
     return render(request, 'blog/search_results.html', context)
-
-def posts_by_tag(request, tag_name):
-    posts = Post.objects.filter(tags__name=tag_name).distinct()
-    context = {
-        'posts': posts,
-        'tag': tag_name,
-        'total_results': posts.count()
-    }
-    return render(request, 'blog/posts_by_tag.html', context)
 
 def home(request):
     posts = Post.objects.all().order_by('-date_posted')[:5]
