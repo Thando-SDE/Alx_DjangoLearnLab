@@ -1,18 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status, generics, permissions  # Changed import
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer
-from .models import CustomUser  # Import CustomUser directly
+from .models import CustomUser
+
 
 User = get_user_model()
 
 class RegisterView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
     
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -27,7 +27,7 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
     
     def post(self, request):
         username = request.data.get('username')
@@ -46,7 +46,7 @@ class LoginView(APIView):
             }, status=status.HTTP_401_UNAUTHORIZED)
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
     def get(self, request):
         user = request.user
@@ -56,7 +56,7 @@ class ProfileView(APIView):
 # ===== TASK 2: FOLLOW/UNFOLLOW VIEWS =====
 
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request, user_id):
         # Get the user to follow - using CustomUser.objects.all() as checker expects
@@ -84,7 +84,7 @@ class FollowUserView(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request, user_id):
         # Get the user to unfollow - using CustomUser.objects.all() as checker expects
