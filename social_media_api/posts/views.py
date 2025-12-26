@@ -1,4 +1,4 @@
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
@@ -33,3 +33,20 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Automatically set the author to the current user when creating a comment
         serializer.save(author=self.request.user)
+
+# ===== TASK 2: FEED VIEW =====
+
+class FeedView(generics.ListAPIView):
+    """
+    View to get posts from users that the current user follows.
+    Ordered by creation date (newest first).
+    """
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        # Get IDs of users that the current user follows
+        following_ids = self.request.user.following.values_list('id', flat=True)
+        
+        # Return posts from followed users, ordered by newest first
+        return Post.objects.filter(author__id__in=following_ids).order_by('-created_at')

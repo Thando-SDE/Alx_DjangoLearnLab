@@ -7,8 +7,24 @@ from django.dispatch import receiver
 class CustomUser(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    followers = models.ManyToManyField('self', symmetrical=False, related_name='following', blank=True)
-
+    
+    # Users who follow this user
+    followers = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='user_followers',  # Changed from 'following'
+        blank=True
+    )
+    
+    # Users this user follows
+    following = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='user_following',
+        blank=True
+    )
+    
+    # Fixed ManyToMany field clashes
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='customuser_set',
@@ -19,7 +35,6 @@ class CustomUser(AbstractUser):
         related_name='customuser_set',
         blank=True
     )
-
+    
     def __str__(self):
         return self.username
-

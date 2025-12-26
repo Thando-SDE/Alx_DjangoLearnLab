@@ -10,4 +10,6 @@ router.register(r'comments', views.CommentViewSet, basename='comment')
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),
+    # TASK 2: Feed endpoint
+    path('feed/', views.FeedView.as_view(), name='feed'),
 ]

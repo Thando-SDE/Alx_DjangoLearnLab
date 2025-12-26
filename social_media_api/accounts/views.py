@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer
 
@@ -50,3 +51,61 @@ class ProfileView(APIView):
         user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+# ===== TASK 2: FOLLOW/UNFOLLOW VIEWS =====
+
+class FollowUserView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, user_id):
+        # Get the user to follow
+        user_to_follow = get_object_or_404(User.objects.all(), id=user_id)
+        
+        # Check if trying to follow self
+        if user_to_follow == request.user:
+            return Response({
+                'error': 'You cannot follow yourself'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if already following
+        if request.user.following.filter(id=user_id).exists():
+            return Response({
+                'message': f'You are already following {user_to_follow.username}'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Add to following list
+        request.user.following.add(user_to_follow)
+        
+        return Response({
+            'message': f'You are now following {user_to_follow.username}',
+            'following_count': request.user.following.count(),
+            'followers_count': user_to_follow.followers.count()
+        }, status=status.HTTP_200_OK)
+
+class UnfollowUserView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, user_id):
+        # Get the user to unfollow
+        user_to_unfollow = get_object_or_404(User.objects.all(), id=user_id)
+        
+        # Check if trying to unfollow self
+        if user_to_unfollow == request.user:
+            return Response({
+                'error': 'You cannot unfollow yourself'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if actually following
+        if not request.user.following.filter(id=user_id).exists():
+            return Response({
+                'message': f'You are not following {user_to_unfollow.username}'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Remove from following list
+        request.user.following.remove(user_to_unfollow)
+        
+        return Response({
+            'message': f'You have unfollowed {user_to_unfollow.username}',
+            'following_count': request.user.following.count(),
+            'followers_count': user_to_unfollow.followers.count()
+        }, status=status.HTTP_200_OK)

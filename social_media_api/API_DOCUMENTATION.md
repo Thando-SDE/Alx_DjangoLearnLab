@@ -4,8 +4,8 @@
 ### Authentication
 All endpoints require token authentication except where noted.
 Include token in request header:
-
 Authorization: Token <your_token>
+
 
 ### Base URL
 `http://127.0.0.1:8000/api/`
@@ -147,6 +147,82 @@ Permissions: Only the comment author can update.
 DELETE /comments/{id}/
 
 Permissions: Only the comment author can delete.
+
+FOLLOW/UNFOLLOW ENDPOINTS (TASK 2)
+1. Follow a User
+POST /api/accounts/follow/{user_id}/
+
+Permissions: Authenticated users only.
+
+Request: No body required.
+
+Response (200 OK):
+
+json
+{
+  "message": "You are now following username",
+  "following_count": 1,
+  "followers_count": 0
+}
+Error Responses:
+
+400: Trying to follow yourself
+
+400: Already following this user
+
+404: User not found
+
+2. Unfollow a User
+POST /api/accounts/unfollow/{user_id}/
+
+Permissions: Authenticated users only.
+
+Request: No body required.
+
+Response (200 OK):
+
+json
+{
+  "message": "You have unfollowed username",
+  "following_count": 0,
+  "followers_count": 0
+}
+Error Responses:
+
+400: Trying to unfollow yourself
+
+400: Not following this user
+
+404: User not found
+
+FEED ENDPOINT (TASK 2)
+Get Followed Users' Posts Feed
+GET /api/feed/
+
+Permissions: Authenticated users only.
+
+Description: Returns posts from users that the current user follows, ordered by creation date (newest first).
+
+Response (200 OK):
+
+json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 2,
+      "author": 5,
+      "author_username": "user_to_follow",
+      "title": "Post from followed user",
+      "content": "This should appear in testuser3's feed!",
+      "created_at": "2025-12-26T21:32:24.275014Z",
+      "updated_at": "2025-12-26T21:32:24.275014Z"
+    }
+  ]
+}
+Note: Uses same pagination as posts list endpoint.
 
 AUTHENTICATION ENDPOINTS (from Task 0)
 Register User
