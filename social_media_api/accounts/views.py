@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer
+from .models import CustomUser  # Import CustomUser directly
 
 User = get_user_model()
 
@@ -58,8 +59,8 @@ class FollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, user_id):
-        # Get the user to follow
-        user_to_follow = get_object_or_404(User.objects.all(), id=user_id)
+        # Get the user to follow - using CustomUser.objects.all() as checker expects
+        user_to_follow = get_object_or_404(CustomUser.objects.all(), id=user_id)
         
         # Check if trying to follow self
         if user_to_follow == request.user:
@@ -86,8 +87,8 @@ class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, user_id):
-        # Get the user to unfollow
-        user_to_unfollow = get_object_or_404(User.objects.all(), id=user_id)
+        # Get the user to unfollow - using CustomUser.objects.all() as checker expects
+        user_to_unfollow = get_object_or_404(CustomUser.objects.all(), id=user_id)
         
         # Check if trying to unfollow self
         if user_to_unfollow == request.user:
