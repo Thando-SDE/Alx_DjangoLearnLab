@@ -26,8 +26,6 @@ def create_follow_notification(sender, instance, created, **kwargs):
     """Create notification when someone follows a user"""
     if created:
         # instance is the follow relationship
-        # instance.from_user is the follower
-        # instance.to_user is the user being followed
         from_user = instance.from_user
         to_user = instance.to_user
         
