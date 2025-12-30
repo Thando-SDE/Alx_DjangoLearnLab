@@ -1,16 +1,19 @@
-# Database
-*.sqlite3
-db.sqlite3
-
-# Python cache
+# Django
+*.log
+*.pot
+*.pyc
 __pycache__/
-*.py[cod]
-*$py.class
+db.sqlite3
+media/
 
-# Virtual environments
-env/
+# Virtual Environment
 venv/
+env/
 .venv/
+
+# Environment variables
+.env
+.env.local
 
 # IDE
 .vscode/
@@ -22,32 +25,9 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Django
-*.log
-local_settings.py
+# Coverage
+.coverage
+htmlcov/
 
-# Production files
-.env
-.env.local
-.env.production
-*.env
-
-# Backup files
-*.backup
-*.bak
-
-# Logs
-debug.log
-*.log
-
-# Collected static files
+# Static files (collected)
 staticfiles/
-
-# Database backups
-*.sqlite3.backup
-
-# Environment files
-.env
-.env.local
-.env.production
-*.env

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here'
@@ -15,7 +14,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'relationship_app',
+    'bookshelf',
 ]
+
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
