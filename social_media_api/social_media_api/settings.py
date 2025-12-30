@@ -22,7 +22,7 @@ except ImportError:
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '8=4k+8om#7yg86%-sseo!qtg_w@+y-dg5mzql-7e-@SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')qburbSECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')u')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False  # SET TO FALSE FOR PRODUCTION
@@ -130,8 +130,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
+# collectstatic configuration for production
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Directory for collectstatic to collect files
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -149,10 +150,11 @@ if not os.path.exists(BASE_DIR / 'media'):
     os.makedirs(BASE_DIR / 'media', exist_ok=True)
 
 # AWS S3 Configuration for production static and media files
+# Using AWS S3 for file hosting as required by the task
 USE_S3 = os.environ.get('USE_S3', 'False') == 'True'
 
 if USE_S3 and STORAGES_AVAILABLE:
-    # AWS S3 settings
+    # AWS S3 settings for production file hosting
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
@@ -164,15 +166,16 @@ if USE_S3 and STORAGES_AVAILABLE:
     AWS_DEFAULT_ACL = 'public-read'
     AWS_LOCATION = 'static'
     
-    # Static files settings
+    # Static files settings with AWS S3
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     
-    # Media files settings
+    # Media files settings with AWS S3
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
     # Local file storage for development
+    # In production, collectstatic will gather files here
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
